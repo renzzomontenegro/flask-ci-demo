@@ -1,26 +1,21 @@
-name: CI Pipeline
+deploy: 
+ needs: build
+  runs-on: ubuntu-latest
 
-on: [push]
-
-jobs:
-  test:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v3
-
-      - uses: actions/setup-python@v4
-        with:
-          python-version: '3.10'
-
-      - run: pip install -r requirements.txt
-
-      - run: pytest
-
-  build:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v3
-
-      - run: docker build -t flask-ci-demo .
+  steps:
+    - name: Deploy via SSH
+      uses: appleboy/ssh-action@v0.1.6
+      with:
+        host: ${{secrets.HOST}}
+        username: ${{secrets.USERNAME}}
+        key: ${{secrets.SSH_KEY}}
+        script: |
+          cd flask-ci-demo || git clone
+          https://github.com/renzzomontenegro/flask-ci-demo.git
+          cd flask-ci-demo
+          git pull
+          docker build -t flask-ci-demo .
+          docker stop app || true
+          docker rm app || true
+          docker run -d -p 80:5000 --name app flask-ci-demo
+          
