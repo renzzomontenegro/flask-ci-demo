@@ -63,4 +63,4 @@ jobs:
             docker rm app || true
 
             # Run new container
-            docker run -d -p 80:5000 --name app flask-ci-dem
+            docker run -d -p 80:5000 --name app flask-ci-demo
