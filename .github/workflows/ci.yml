@@ -49,7 +49,7 @@ jobs:
           script: |
             # Clone repo if not exists
             if [ ! -d "flask-ci-demo" ]; then
-              git clone https://github.com/YOUR_USERNAME/flask-ci-demo.git
+              git clone https://github.com/renzzomontenegro/flask-ci-demo.git
             fi
 
             cd flask-ci-demo
